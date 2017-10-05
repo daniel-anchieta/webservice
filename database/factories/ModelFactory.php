@@ -21,7 +21,7 @@ $factory->define(App\Client::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,
         'email' => $faker->email,
-        'phone' => $faker->phoneNumber,
+        'phone' => $faker->phoneNumber
     ];
 });
 
