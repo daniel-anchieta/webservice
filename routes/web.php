@@ -14,3 +14,20 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->group([
+    'prefix' => 'api/clients',
+    //'namespace' => 'App\Http\Controllers'
+],function() use($router){
+    $router->get('','ClientsController@index'); // Collection 
+    $router->get('{id}','ClientsController@show'); // Elementos 
+    $router->post('','ClientsController@store'); //Elements
+    $router->put('{id}','ClientsController@update');
+    $router->delete('{id}','ClientsController@destroy');
+    /*Create
+    Retrieve
+    Update
+    Delete*/
+    // Collection ou Elementos 
+});
+
