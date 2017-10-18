@@ -1,25 +1,31 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Address;
 use App\Client;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class ClientsController extends Controller
+class AddressesController extends Controller
 {
-    public function index()
+    public function index($clientId)
     {
-       // return Client::all();
-       return son_response()->make(Client::all());
+       if(!($client = Client::find($clientId))){
+           throw new ModelNotFoundException("Client requisitado nao existe");
+       }
+       return son_response()->make(Address::where('client_id',$clientId)->get());
     }
 
-    public function show($id)
+    public function show($id, $clientId)
     {
-        if(!($client = Client::find($id))){
+        if(!(Client::find($clientId))){
             throw new ModelNotFoundException("Client requisitado não existe");
         }
-       // return $client;
-       return son_response()->make($client);
+        if(!(Address::find($id))){
+            throw new ModelNotFoundException("Endereco requisitado não existe");
+        }
+        $result = Address::where('client_id',$clientId)->where('id',$id)->get()->first();
+       return son_response()->make($result);
     }
 
     public function store(Request $request)

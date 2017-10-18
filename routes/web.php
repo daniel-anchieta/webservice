@@ -31,3 +31,12 @@ $router->group([
     // Collection ou Elementos 
 });
 
+$router->group([
+    'prefix' => 'api/clients/{client}/addresses'
+],function() use($router){
+    $router->get('','AddressesController@index');  
+    $router->get('{id}','AddressesController@show'); 
+    $router->post('','AddressesController@store'); 
+    $router->put('{id}','AddressesController@update');
+    $router->delete('{id}','AddressesController@destroy');
+});
