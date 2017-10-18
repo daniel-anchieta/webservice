@@ -22,6 +22,11 @@ class ClientsController extends Controller
 
     public function store(Request $request)
     {
+        $this->validate($request,[
+            'name' => 'required',
+            'email' => 'required',
+            'phone' => 'required'
+        ]);
         $client = Client::create($request->all());
         return response()->json($client,201);
     }
@@ -30,6 +35,12 @@ class ClientsController extends Controller
         if(!($client = Client::find($id))){
             throw new ModelNotFoundException("Client requisitado não existe");
         }
+
+        $this->validate($request,[
+            'name'=>'required',
+            'email'=>'required',
+            'phone'=>'required'
+        ]);
         $client->fill($request->all());
         $client->save();
         return response()->json($client,200);
