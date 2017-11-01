@@ -9,7 +9,7 @@
 | It is a breeze. Simply tell Lumen the URIs it should respond to
 | and give it the Closure to call when that URI is requested.
 |
-*/
+ */
 
 $router->get('/', function () use ($router) {
     return $router->app->version();
@@ -18,47 +18,68 @@ $router->get('/', function () use ($router) {
 $router->group([
     'prefix' => 'api/clients',
     //'namespace' => 'App\Http\Controllers'
-],function() use($router){
-    $router->get('','ClientsController@index'); // Collection 
-    $router->get('{id}','ClientsController@show'); // Elementos 
-    $router->post('','ClientsController@store'); //Elements
-    $router->put('{id}','ClientsController@update');
-    $router->delete('{id}','ClientsController@destroy');
+], function () use ($router) {
+    $router->get('', 'ClientsController@index'); // Collection 
+    $router->get('{id}', 'ClientsController@show'); // Elementos 
+    $router->post('', 'ClientsController@store'); //Elements
+    $router->put('{id}', 'ClientsController@update');
+    $router->delete('{id}', 'ClientsController@destroy');
     /*Create
     Retrieve
     Update
     Delete*/
     // Collection ou Elementos 
+
 });
 
 $router->group([
     'prefix' => 'api/clients/{client}/addresses'
-],function() use($router){
-    $router->get('','AddressesController@index');  
-    $router->get('{id}','AddressesController@show'); 
-    $router->post('','AddressesController@store'); 
-    $router->put('{id}','AddressesController@update');
-    $router->delete('{id}','AddressesController@destroy');
+], function () use ($router) {
+    $router->get('', 'AddressesController@index');
+    $router->get('{id}', 'AddressesController@show');
+    $router->post('', 'AddressesController@store');
+    $router->put('{id}', 'AddressesController@update');
+    $router->delete('{id}', 'AddressesController@destroy');
 });
 
-$router->get('tcu',function(){
+$router->get('tcu', function () {
     $client = new Zend\Soap\Client('http://contas.tcu.gov.br/debito/CalculoDebito?wsdl');
     echo "Informações do Servidor:";
-    print_r($client->getOptions()); 
+    print_r($client->getOptions());
     echo "Funções:";
     print_r($client->getFunctions());
     echo "Tipos";
     print_r($client->getTypes());
     echo "Resultado:";
     print_r($client->obterSaldoAtualizado([
-        'parcelas'=> [
-            'parcela' =>[
-                'data'=> '1995-01-01',
-                'tipo'=> 'D',
-                'valor'=> 35000
+        'parcelas' => [
+            'parcela' => [
+                'data' => '1995-01-01',
+                'tipo' => 'D',
+                'valor' => 35000
             ]
         ],
-        'aplicaJuros'=> 'true',
-        'dataAtualizacao'=> '2016-12-31'
+        'aplicaJuros' => 'true',
+        'dataAtualizacao' => '2016-12-31'
     ]));
 });
+
+$uri = 'http://son-soap.dev/server';
+$router->get('son-soap.wsdl', function () use ($uri) {
+    $autoDiscover = new Zend\Soap\AutoDiscover();
+    $autoDiscover->setUri($uri);
+    $autoDiscover->setServiceName('SONSOAP');
+    $autoDiscover->addFunction('soma');
+    $autoDiscover->handle();
+});
+
+/**
+ * @param int $num1
+ * @param int $num2
+ * @return int
+ */
+
+function soma($num1, $num2)
+{
+    return $num1+$num2;
+}
