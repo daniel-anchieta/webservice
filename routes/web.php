@@ -64,13 +64,32 @@ $router->get('tcu', function () {
     ]));
 });
 
-$uri = 'http://son-soap.dev/server';
+$uri = 'http://son-soap.dev:8080';
+#$uri = 'http://localhost:8080';
 $router->get('son-soap.wsdl', function () use ($uri) {
     $autoDiscover = new Zend\Soap\AutoDiscover();
-    $autoDiscover->setUri($uri);
+    $autoDiscover->setUri("$uri/server");
     $autoDiscover->setServiceName('SONSOAP');
     $autoDiscover->addFunction('soma');
     $autoDiscover->handle();
+});
+
+$router->post('server', function() use($uri){
+    $server = new Zend\Soap\Server("$uri/son-soap.wsdl", [
+        'cache_wsdl' => WSDL_CACHE_NONE
+    ]);
+    $server->setUri("$uri/server");
+    return $server
+        ->setReturnResponse(true)
+        ->addFunction('soma')
+        ->handle();
+});
+
+$router->get('soap-test', function () use($uri){
+    $client = new Zend\Soap\Client("$uri/son-soap.wsdl",[
+        'cache_wsdl'=>WSDL_CACHE_NONE
+    ]);
+    print_r($client->soma(2,5));
 });
 
 /**
