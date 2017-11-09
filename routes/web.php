@@ -64,8 +64,9 @@ $router->get('tcu', function () {
     ]));
 });
 
-$uri = 'http://son-soap.dev:8080';
-#$uri = 'http://localhost:8080';
+#$uri = 'http://son-soap.dev:8080/webservice/php-webservice/public';
+$uri = 'http://localhost:8080/webservice/php-webservice/public';
+#$uri = 'http://localhost:8080/laravel/public';
 $router->get('son-soap.wsdl', function () use ($uri) {
     $autoDiscover = new Zend\Soap\AutoDiscover();
     $autoDiscover->setUri("$uri/server");
