@@ -5,6 +5,7 @@ use App\Client;
 use Illuminate\Contracts\Support\Arrayable;
 use Zend\Config\Config;
 use Zend\Config\Writer\Xml;
+use App\Types\ClientType;
 //use Illuminate\Http\Request;
 //use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -28,17 +29,20 @@ class ClientsSoapController
        return son_response()->make($client);
     }*/
 
-   /* public function create(Request $request)
+    /**
+     * @param \App\Types\ClientType $type
+     * @return string
+     */
+    public function create(ClientType $type)
     {
-        $this->validate($request,[
-            'name' => 'required',
-            'email' => 'required',
-            'phone' => 'required'
-        ]);
-        $client = Client::create($request->all());
-        //return response()->json($client,201);
-        return son_response()->make($client,201);
-    }*/
+        $data = [
+            'name'=>$type->name,
+            'email'=>$type->email,
+            'phone'=>$type->phone
+        ];
+        $client = Client::create($data);
+        return $this->getXML($client);
+    }
     /*public function update(Request $request,$id)
     {
         if(!($client = Client::find($id))){

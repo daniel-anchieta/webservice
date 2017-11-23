@@ -121,7 +121,12 @@ $router->get('soap-client', function () use($uriClient){
     $client = new Zend\Soap\Client("$uriClient/son-soap.wsdl",[
         'cache_wsdl'=>WSDL_CACHE_NONE
     ]);
-    print_r($client->listAll());
+  //  print_r($client->listAll());
+    print_r($client->create([
+        'name'=>'Daniel',
+        'email'=>'daniel@email.com',
+        'phone'=>'55484'
+    ]));
 });
 
 
